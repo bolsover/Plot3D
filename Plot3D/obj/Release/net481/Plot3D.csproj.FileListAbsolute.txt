@@ -1,0 +1,10 @@
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\bin\Release\net481\Plot3D.dll
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\bin\Release\net481\Plot3D.pdb
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\bin\Release\net481\Plot3D.xml
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.csproj.AssemblyReference.cache
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.GeneratedMSBuildEditorConfig.editorconfig
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.csproj.CoreCompileInputs.cache
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.sourcelink.json
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.dll
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.xml
+D:\02_Repository\02_Bolsover\Plot3D\Plot3D\obj\Release\net481\Plot3D.pdb

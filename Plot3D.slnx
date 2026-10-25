@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Plot3D/Plot3D.csproj" />
+  <Project Path="Plot3D.Tests/Plot3D.Tests.csproj" />
+  <Project Path="Plot3D.Sample/Plot3D.Sample.csproj" />
+  <Project Path="Plot3D.UI/Plot3D.UI.csproj" />
+</Solution>

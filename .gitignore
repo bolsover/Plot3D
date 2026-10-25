@@ -1,0 +1,11 @@
+﻿/.vs/*.*
+/.idea/*.*
+/Plot3D.UI/bin/*.*
+/Plot3D.UI/obj/*.*
+/Plot3D.Tests/bin/*.*
+/Plot3D.Tests/obj/*.*
+/Plot3D.Sample/obj/*.*
+/Plot3D.Sample/bin/*.*
+/Plot3D/obj/*.*
+/Plot3D/bin/*.*
+*.dll

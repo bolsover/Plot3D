@@ -1,0 +1,421 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plot3D</name>
+    </assembly>
+    <members>
+        <member name="T:Plot3D.Core.Bounds3D">
+            <summary>
+            Represents an axis-aligned 3D bounding box [XMin, XMax] x [YMin, YMax] x [ZMin, ZMax].
+            </summary>
+        </member>
+        <member name="T:Plot3D.Core.Color3D">
+            <summary>
+            Represents an RGBA color with double or byte channels for cross-platform 3D visualization.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Core.Interval">
+            <summary>
+            Represents a 1-dimensional closed interval [Min, Max] for curve parametrization.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Core.LineSpec">
+            <summary>
+            Line specification (combining LineStyle, Marker, and Color).
+            Parses specifiers such as 'r--o', 'b:', 'g-.*', 'm^', etc.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Core.LineStyle">
+            <summary>
+            Line style specifiers.
+            </summary>
+        </member>
+        <member name="F:Plot3D.Core.LineStyle.Solid">
+            <summary>Solid line ('-')</summary>
+        </member>
+        <member name="F:Plot3D.Core.LineStyle.Dashed">
+            <summary>Dashed line ('--')</summary>
+        </member>
+        <member name="F:Plot3D.Core.LineStyle.Dotted">
+            <summary>Dotted line (':')</summary>
+        </member>
+        <member name="F:Plot3D.Core.LineStyle.DashDot">
+            <summary>Dash-dot line ('-.')</summary>
+        </member>
+        <member name="F:Plot3D.Core.LineStyle.None">
+            <summary>No line ('none')</summary>
+        </member>
+        <member name="T:Plot3D.Core.MarkerStyle">
+            <summary>
+            Marker style specifiers.
+            </summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.None">
+            <summary>No marker ('none')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Circle">
+            <summary>Circle marker ('o')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Plus">
+            <summary>Plus sign ('+')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Asterisk">
+            <summary>Asterisk ('*')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Point">
+            <summary>Point / Dot ('.')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Cross">
+            <summary>Cross ('x')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Square">
+            <summary>Square ('s')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Diamond">
+            <summary>Diamond ('d')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.TriangleUp">
+            <summary>Upward-pointing triangle ('^')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.TriangleDown">
+            <summary>Downward-pointing triangle ('v')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.TriangleRight">
+            <summary>Right-pointing triangle ('>')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.TriangleLeft">
+            <summary>Left-pointing triangle ('&lt;')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Pentagram">
+            <summary>Five-pointed star / Pentagram ('p')</summary>
+        </member>
+        <member name="F:Plot3D.Core.MarkerStyle.Hexagram">
+            <summary>Six-pointed star / Hexagram ('h')</summary>
+        </member>
+        <member name="T:Plot3D.Core.Plot3DOptions">
+            <summary>
+            Configuration options for 3D parametric function plotting.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.TRange">
+            <summary>Parametrization interval [tmin, tmax]. Default is [-5, 5].</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.Color">
+            <summary>Color of the line. Default is blue.</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.LineWidth">
+            <summary>Width of the curve line. Default is 1.5.</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.LineStyle">
+            <summary>Line style (Solid, Dashed, Dotted, DashDot, None).</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.Marker">
+            <summary>Marker symbol style.</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MarkerSize">
+            <summary>Size of markers in points/pixels. Default is 6.0.</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MarkerEdgeColor">
+            <summary>Marker edge color. If null, matches Color.</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MarkerFaceColor">
+            <summary>Marker face/fill color. If null, transparent or auto.</summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MeshDensity">
+            <summary>
+            Minimum number of evaluation points over the domain.
+            Higher values resolve rapidly changing curves more reliably.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MaxFunctionEvaluations">
+            <summary>
+            Maximum number of function evaluations allowed for adaptive sampling. Default is 25000.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MaxRecursionDepth">
+            <summary>
+            Maximum recursion depth for adaptive subdivision. Default is 12.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.RelativeTolerance">
+            <summary>
+            Relative tolerance for adaptive mesh refinement (chord error / curvature). Default is 2e-3.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.AbsoluteTolerance">
+            <summary>
+            Absolute tolerance for adaptive mesh refinement. Default is 1e-4.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.MaxSegmentAngle">
+            <summary>
+            Maximum angle (in radians) allowed between consecutive segments before subdividing. Default is ~0.15 rad (~8.5 deg).
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.ShowDiscontinuities">
+            <summary>
+            Whether to automatically detect and split lines at asymptotes and discontinuities. Default is true.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Core.Plot3DOptions.DisplayName">
+            <summary>
+            Display name for legends.
+            </summary>
+        </member>
+        <member name="M:Plot3D.Core.Plot3DOptions.CreateDefault">
+            <summary>
+            Creates a default options object.
+            </summary>
+        </member>
+        <member name="M:Plot3D.Core.Plot3DOptions.ApplyLineSpec(Plot3D.Core.LineSpec)">
+            <summary>
+            Applies settings from a LineSpec object or string.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Core.Point3D">
+            <summary>
+            Represents a point in 3-dimensional Cartesian space with double-precision coordinates.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Core.Vector3D">
+            <summary>
+            Represents a 3-dimensional vector with double-precision components and standard linear algebra operations.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Export.DataExporter3D">
+            <summary>
+            Exports 3D sampled curve points to CSV, TSV, and tabular formats.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Export.ObjExporter3D">
+            <summary>
+            Exports 3D curves as Wavefront OBJ polyline meshes for import into 3D software (Blender, Unity, CAD).
+            </summary>
+        </member>
+        <member name="T:Plot3D.Expressions.FormulaParseException">
+            <summary>
+            Exception thrown when a mathematical formula fails to parse.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Expressions.FormulaParser">
+            <summary>
+            High-performance mathematical formula parser and compiler for parametric equations x(t), y(t), z(t).
+            Supports arithmetic operators, implicit multiplication, standard constants (pi, e, tau, phi),
+            and comprehensive elementary and special trigonometric, hyperbolic, exponential, and rounding functions.
+            </summary>
+        </member>
+        <member name="M:Plot3D.Expressions.FormulaParser.Parse(System.String)">
+            <summary>
+            Parses a mathematical formula into a compiled high-speed delegate f(t) -> double.
+            </summary>
+            <param name="formula">Formula string, e.g. "sin(t) + 2*cos(2*t)", "exp(-0.1*t)*cos(t)", "(2+cos(3t))cos(2t)".</param>
+            <returns>Compiled function delegate.</returns>
+        </member>
+        <member name="M:Plot3D.Expressions.FormulaParser.TryParse(System.String,System.Func{System.Double,System.Double}@,System.String@)">
+            <summary>
+            Attempts to parse a formula, returning true if successful or false with an error message if invalid.
+            </summary>
+        </member>
+        <member name="M:Plot3D.Expressions.FormulaParser.EvaluateConstant(System.String)">
+            <summary>
+            Evaluates a constant mathematical expression (e.g. "2*pi", "6*pi", "-2*pi", "10", "sqrt(2)").
+            </summary>
+        </member>
+        <member name="M:Plot3D.Expressions.FormulaParser.ParseInterval(System.String)">
+            <summary>
+            Parses an interval from text (e.g. "[0, 2*pi]", "0, 2*pi", "0:6*pi", "[-5, 5]").
+            </summary>
+        </member>
+        <member name="T:Plot3D.Expressions.MathFunctionHelper">
+            <summary>
+            Provides mathematical helper functions used by the formula parser and evaluator.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Figure.Axes3D">
+            <summary>
+            Represents the 3D axes box, grid, labels, and coordinate planes for 3D visualization.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Figure.Plot3DFigure">
+            <summary>
+            Represents a high-level 3D plot figure container.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Objects.ParameterizedFunctionLine3D">
+            <summary>
+            Represents a 3D parameterized function line graphics object.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Palettes.ColorMap3D">
+            <summary>
+            Represents a platform-independent scientific colormap for mapping normalized scalar values to Color3D.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Presets.PresetCurve3D">
+            <summary>
+            Represents a predefined 3D parametric curve preset with formula equations and metadata.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Projection.ProjectionMode">
+            <summary>
+            Projection mode for 3D camera.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Projection.Camera3D">
+            <summary>
+            Represents a 3D camera and projection transformer mapping world 3D coordinates to 2D viewport coordinates.
+            </summary>
+        </member>
+        <member name="M:Plot3D.Projection.Camera3D.Setup(Plot3D.Core.Bounds3D,System.Double,System.Double,System.Double)">
+            <summary>
+            Updates camera matrices for the given data bounds and viewport dimensions.
+            </summary>
+        </member>
+        <member name="M:Plot3D.Projection.Camera3D.Project(Plot3D.Core.Point3D@,System.Double,System.Double)">
+            <summary>
+            Transforms a 3D point in world space to 2D viewport coordinates and depth.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Projection.TickCalculator">
+            <summary>
+            Computes readable, nicely spaced axis tick marks using the Heckbert / Wilkinson algorithm.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Rendering.ConsoleRenderer3D">
+            <summary>
+            Renders 3D curves into ASCII / Unicode text for terminal and CLI visualization.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Rendering.SvgRenderer3D">
+            <summary>
+            Renders 3D figures into scalable vector graphics (SVG) with depth-sorted polylines, axis grids, ticks, and markers.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Sampling.AdaptiveSampler3D">
+            <summary>
+            Adaptive mesh generation and curve sampling engine for 3D parametric curves.
+            Implements recursive chord-error and curvature-based subdivision.
+            </summary>
+        </member>
+        <member name="T:Plot3D.Sampling.SampledCurve3D">
+            <summary>
+            Represents the discrete evaluation points, segments, and metadata resulting from sampling a 3D parametric curve.
+            </summary>
+        </member>
+        <member name="P:Plot3D.Sampling.SampledCurve3D.Segments">
+            <summary>
+            Continuous curve segments separated by NaN / discontinuities / asymptotes.
+            </summary>
+        </member>
+        <member name="T:Plot3D.ThreeDimensionalPlotter">
+            <summary>
+            Plots 3D parametric curves x = funx(t), y = funy(t), z = funz(t) using adaptive mesh generation.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double})">
+            <summary>
+            Plots the 3D parametric curve over the default interval [-5, 5].
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Double,System.Double)">
+            <summary>
+            Plots the 3D parametric curve over the specified interval [tmin, tmax].
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.ValueTuple{System.Double,System.Double})">
+            <summary>
+            Plots the 3D parametric curve over the specified interval tuple (tmin, tmax).
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},Plot3D.Core.Interval)">
+            <summary>
+            Plots the 3D parametric curve over the specified interval.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.String)">
+            <summary>
+            Plots the 3D parametric curve using a LineSpec string (e.g. 'r--o', 'b:', 'g-.*') over [-5, 5].
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Double,System.Double,System.String)">
+            <summary>
+            Plots the 3D parametric curve over [tmin, tmax] using a LineSpec string.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.ValueTuple{System.Double,System.Double},System.String)">
+            <summary>
+            Plots the 3D parametric curve over (tmin, tmax) using a LineSpec string.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},Plot3D.Core.Interval,Plot3D.Core.LineSpec)">
+            <summary>
+            Plots the 3D parametric curve over the specified interval using a LineSpec object.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},Plot3D.Core.Plot3DOptions)">
+            <summary>
+            Plots the 3D parametric curve using custom Plot3DOptions.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.PlotFigure(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Nullable{Plot3D.Core.Interval},Plot3D.Core.LineSpec)">
+            <summary>
+            Creates a new figure containing the 3D parametric plot.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Calculate(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Nullable{Plot3D.Core.Interval},System.Nullable{System.Int32})">
+            <summary>
+            Computes discrete coordinate arrays (X, Y, Z, T) .
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Calculate(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Double,System.Double,System.Nullable{System.Int32})">
+            <summary>
+            Computes discrete coordinate arrays (X, Y, Z, T) over [tmin, tmax].
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.CalculatePoints(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Nullable{Plot3D.Core.Interval},System.Nullable{System.Int32})">
+            <summary>
+            Computes discrete Point3D curve points over the specified interval.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.SaveSvg(System.String,System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Nullable{Plot3D.Core.Interval},Plot3D.Core.LineSpec,System.Int32,System.Int32)">
+            <summary>
+            Saves the 3D parametric plot as an SVG vector image file.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.RenderConsole(System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Func{System.Double,System.Double},System.Nullable{Plot3D.Core.Interval},Plot3D.Core.LineSpec,System.Int32,System.Int32)">
+            <summary>
+            Generates a terminal/console ASCII representation of the 3D parametric plot.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.String,System.String,System.String)">
+            <summary>
+            Plots the 3D parametric curve from mathematical formula strings x(t), y(t), z(t) over [-5, 5].
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.String,System.String,System.String,System.Double,System.Double)">
+            <summary>
+            Plots the 3D parametric curve from mathematical formula strings x(t), y(t), z(t) over [tmin, tmax].
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.String,System.String,System.String,Plot3D.Core.Interval,Plot3D.Core.LineSpec)">
+            <summary>
+            Plots the 3D parametric curve from mathematical formula strings x(t), y(t), z(t) over the specified interval.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Plot(System.String,System.String,System.String,System.Double,System.Double,System.String)">
+            <summary>
+            Plots the 3D parametric curve from mathematical formula strings with a LineSpec string.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.PlotFigure(System.String,System.String,System.String,System.Nullable{Plot3D.Core.Interval},Plot3D.Core.LineSpec)">
+            <summary>
+            Creates a new figure containing the 3D parametric plot evaluated from mathematical formula strings.
+            </summary>
+        </member>
+        <member name="M:Plot3D.ThreeDimensionalPlotter.Calculate(System.String,System.String,System.String,System.Nullable{Plot3D.Core.Interval},System.Nullable{System.Int32})">
+            <summary>
+            Computes discrete coordinate arrays from mathematical formula strings.
+            </summary>
+        </member>
+    </members>
+</doc>

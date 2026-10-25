@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net9.0-windows;net8.0-windows;net481;net10.0-windows</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Plot3D.UI</RootNamespace>
+    <AssemblyName>Plot3D.UI</AssemblyName>
+    <NoWarn>$(NoWarn);WFO1000;WFO5001</NoWarn>
+    <ApplicationIcon Condition="Exists('app.ico')">app.ico</ApplicationIcon>
+    <ApplicationIcon Condition="!Exists('app.ico') and Exists('Plot3D.ico')">Plot3D.ico</ApplicationIcon>
+	<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+	<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+    <AlibreProgramDir Condition="'$(AlibreProgramDir)' == '' and Exists('C:\Program Files\Alibre Design 29.1.1.29133\Program')">C:\Program Files\Alibre Design 29.1.1.29133\Program</AlibreProgramDir>
+    <AlibreProgramDir Condition="'$(AlibreProgramDir)' == '' and Exists('C:\Program Files\Alibre Design 29.1.0.29127\Program')">C:\Program Files\Alibre Design 29.1.0.29127\Program</AlibreProgramDir>
+    <AlibreProgramDir Condition="'$(AlibreProgramDir)' == ''">C:\Program Files\Alibre Design 29.1.1.29133\Program</AlibreProgramDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="AlibreAddOn">
+      <HintPath Condition="Exists('$(AlibreProgramDir)\AlibreAddOn.dll')">$(AlibreProgramDir)\AlibreAddOn.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AlibreAddOn" Condition="'$(TargetFramework)' == 'net481'">
+      <HintPath>C:\Program Files\Alibre Design 29.1.1.29133\Program\AlibreAddOn.dll</HintPath>
+    </Reference>
+    <Reference Include="AlibreX">
+      <HintPath Condition="Exists('$(AlibreProgramDir)\AlibreX.dll')">$(AlibreProgramDir)\AlibreX.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AlibreX" Condition="'$(TargetFramework)' == 'net481'">
+      <HintPath>C:\Program Files\Alibre Design 29.1.1.29133\Program\AlibreX.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Plot3D.adc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Plot3D.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="addon.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\Plot3D\Plot3D.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyExeToDll" AfterTargets="Build" Condition="'$(TargetFramework)' == 'net481'">
+    <Copy SourceFiles="$(TargetDir)$(TargetName).exe" DestinationFiles="$(TargetDir)$(TargetName).dll" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

@@ -1,0 +1,10 @@
+<AlibreDesignAddOn specificationVersion="2" friendlyName="Plot3D Studio Addon">
+   <Author name="DavidBolsover" link="https://github.com/bolsover/Plot3D"/>
+   <Copyright>Copyright (c) 2026. DavidBolsover</Copyright>
+   <DLL type="Managed" loadedWhen="Startup" location="Plot3D.UI.dll"/>
+   <Icon location="Plot3D.ico"/>
+   <Menu text="Plot3D"/>
+   <Description>Plot3D 3D Parametric Formula Studio and 3D Sketch Generator</Description>
+   <Workspace type="Part"/>
+   <Property name="Identifier" value="{54F4CD6C-7734-4BB2-9D85-DFE8E5088D6A}"/>
+</AlibreDesignAddOn>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plot3D for Alibre Design: User Guide &amp; Mathematical Reference Manual</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page);
+      font-size: 8pt;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #718096;
+    }
+  }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    color: #1a202c;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4 {
+    color: #1a365d;
+    font-weight: 700;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  h1 {
+    font-size: 19pt;
+    border-bottom: 2.5px solid #2b6cb0;
+    padding-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 13pt;
+    border-bottom: 1.5px solid #e2e8f0;
+    padding-bottom: 3px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+
+  h3 {
+    font-size: 10.5pt;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    color: #2c5282;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 7px;
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin-top: 0;
+    margin-bottom: 8px;
+    padding-left: 18px;
+  }
+
+  li {
+    margin-bottom: 3px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    font-size: 8.5pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e0;
+    padding: 4.5px 7px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #ebf8ff;
+    color: #2b6cb0;
+    font-weight: 600;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #f7fafc;
+  }
+
+  code {
+    font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+    font-size: 8.5pt;
+    background-color: #edf2f7;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #805ad5;
+  }
+
+  pre {
+    font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+    font-size: 8pt;
+    background-color: #2d3748;
+    color: #edf2f7;
+    padding: 8px 10px;
+    border-radius: 4px;
+    overflow-x: hidden;
+    line-height: 1.3;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .callout {
+    background-color: #f0fff4;
+    border-left: 4px solid #38a169;
+    padding: 8px 10px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 8.8pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .callout-title {
+    font-weight: 700;
+    color: #22543d;
+    margin-bottom: 2px;
+  }
+
+  .callout-warn {
+    background-color: #fffaf0;
+    border-left: 4px solid #dd6b20;
+    padding: 8px 10px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 8.8pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .callout-warn .callout-title {
+    color: #7b341e;
+  }
+
+  .math-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3.5px solid #3182ce;
+    padding: 7px 10px;
+    margin: 7px 0;
+    border-radius: 0 4px 4px 0;
+    font-family: 'Cambria Math', 'Georgia', serif;
+    font-size: 9.2pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .footer-note {
+    margin-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 6px;
+    font-size: 7.5pt;
+    color: #718096;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>Plot3D for Alibre Design</h1>
+<div class="subtitle">3D Parametric Formula Studio &amp; Geometric Modeling Engine User Guide</div>
+
+<h2>1. Introduction &amp; Architecture Overview</h2>
+<p>
+  <strong>Plot3D for Alibre Design</strong> is a mathematical modeling and CAD integration tool designed for engineers, industrial designers, and educators. It enables mathematical synthesis, visualization, and native generation of complex 3D parametric curves, helical paths, mathematical knots, and organic wireframes directly inside <strong>Alibre Design Part workspaces (<code>.AD_PR</code>)</strong>.
+</p>
+
+<pre><code>+-----------------------------------------------------------------------------+
+|                                Plot3D Engine                                |
+|                                                                             |
+|   +-----------------------+     +--------------------+     +------------+   |
+|   | Mathematical Formulas | --> | Adaptive Sampling  | --> | 3D Viewport|   |
+|   | x(t), y(t), z(t)      |     | Chord & Curvature  |     | Projection |   |
+|   +-----------------------+     +--------------------+     +------------+   |
+|                                            |                                |
++--------------------------------------------|--------------------------------+
+                                             v
+               +---------------------------------------------+
+               |     Alibre Design Integration (IAlibreAddOn) |
+               |                                             |
+               |  +---------------------------------------+  |
+               |  | Unit Scaling & Coordinate Transform   |  |
+               |  +---------------------------------------+  |
+               |                     |                       |
+               |     +---------------+---------------+       |
+               |     |               |               |       |
+               |     v               v               v       |
+               |  +----------+  +----------+  +-----------+  |
+               |  | B-Spline |  | Polyline |  | Point Node|  |
+               |  +----------+  +----------+  +-----------+  |
+               |                     |                       |
+               |                     v                       |
+               |       [ Active Alibre 3D Sketch ]           |
+               +---------------------------------------------+
+                                     |
+                                     v
+                       [ 3D CAD Sweep / Loft / Pipe ]</code></pre>
+
+<h3>Key Architectural Highlights</h3>
+<ul>
+  <li><strong>Dual-Mode Execution</strong>: Operates as an integrated Alibre Design Add-On (via <code>IAlibreAddOn</code>) or as a standalone parametric formula studio.</li>
+  <li><strong>Compiled Expression Engine</strong>: Compiles formula text into direct C# expression tree delegates for near-instant evaluation across thousands of sample points.</li>
+  <li><strong>Curvature-Adaptive Sampling</strong>: Dynamically refines sampling density based on local chord error and segment curvature angles, ensuring smooth representation of tight bends without point bloat on linear spans.</li>
+  <li><strong>Native 3D Sketch Generation</strong>: Directly constructs cubic <strong>B-Splines</strong>, segmented <strong>Polylines</strong>, or discrete <strong>Point Nodes</strong> inside Alibre's modeling kernel.</li>
+  <li><strong>Automated Unit &amp; Scale Management</strong>: Automatically transforms formulas into Alibre's internal Centimeter kernel space while allowing users to work in Millimeters, Inches, Meters, or Feet.</li>
+</ul>
+
+<h2>2. Installation &amp; System Requirements</h2>
+<table>
+  <tr>
+    <th>Component</th>
+    <th>Minimum Requirement</th>
+    <th>Recommended Specification</th>
+  </tr>
+  <tr>
+    <td><strong>Alibre Design</strong></td>
+    <td>Alibre Design v28 / v29+ (Build &ge; 29000)</td>
+    <td>Alibre Design Expert / Professional v29+</td>
+  </tr>
+  <tr>
+    <td><strong>Operating System</strong></td>
+    <td>Windows 10 (64-bit)</td>
+    <td>Windows 11 (64-bit)</td>
+  </tr>
+  <tr>
+    <td><strong>Runtime</strong></td>
+    <td>.NET 8.0 Desktop Runtime / .NET Framework 4.8</td>
+    <td>.NET 8.0 x64 Desktop Runtime</td>
+  </tr>
+  <tr>
+    <td><strong>Display &amp; Graphics</strong></td>
+    <td>1280 &times; 800, GDI+ / DirectX acceleration</td>
+    <td>1920 &times; 1080 or 4K with dedicated GPU</td>
+  </tr>
+</table>
+
+<h3>Add-On Registration Procedure</h3>
+<ol>
+  <li>Navigate to the Alibre Design Add-Ons folder (e.g. <code>%APPDATA%\Alibre Design\Add-Ons\</code>).</li>
+  <li>Place the <code>Plot3D.UI.adaddin</code> manifest into the folder:
+    <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;AlibreAddOnManager&gt;
+  &lt;AddOn Assembly="Plot3D.UI.dll"
+         Class="Plot3D.UI.Alibre.AlibreAddOn"
+         Icon="Plot3D.ico"
+         MenuText="Plot3D"
+         ToolTip="3D Parametric Formula Studio for Alibre Design"
+         AutoLoad="1" /&gt;
+&lt;/AlibreAddOnManager&gt;</code></pre>
+  </li>
+  <li>Launch Alibre Design, open any Part document (<code>.AD_PR</code>), and access the studio via <strong>Plot3D &gt; 3D Parametric Formula Studio...</strong></li>
+</ol>
+
+<h2>3. User Interface &amp; Interactive Viewport Controls</h2>
+<table>
+  <tr>
+    <th>Mouse / Keyboard Action</th>
+    <th>Interaction Mode</th>
+    <th>Functionality</th>
+  </tr>
+  <tr>
+    <td><strong>Left Mouse Drag</strong></td>
+    <td>Orbit / Turntable</td>
+    <td>Rotates azimuth (&minus;180&deg; to +180&deg;) and elevation (&minus;90&deg; to +90&deg;)</td>
+  </tr>
+  <tr>
+    <td><strong>Right / Middle Mouse Drag</strong></td>
+    <td>Pan / Translate</td>
+    <td>Pans the camera focus point smoothly across the viewport</td>
+  </tr>
+  <tr>
+    <td><strong>Mouse Wheel Scroll</strong></td>
+    <td>Zoom In / Out</td>
+    <td>Adjusts the viewport scale factor from 0.1&times; up to 20.0&times;</td>
+  </tr>
+  <tr>
+    <td><strong>Hotkeys: R / A / P</strong></td>
+    <td>Quick Actions</td>
+    <td><strong>R</strong>: Reset view; <strong>A</strong>: Toggle auto-turntable; <strong>P</strong>: Re-evaluate and plot</td>
+  </tr>
+  <tr>
+    <td><strong>Hotkeys: G / B / Z / H</strong></td>
+    <td>Display Toggles</td>
+    <td><strong>G</strong>: 3D Grid; <strong>B</strong>: Bounding Box; <strong>Z</strong>: XYZ Gizmo; <strong>H</strong>: Point Inspector HUD</td>
+  </tr>
+</table>
+
+<h2>4. Mathematical Formula Engine &amp; Syntax Guide</h2>
+<p>
+  Formulas in Plot3D define spatial positions (x(t), y(t), z(t)) as continuous functions of the scalar parameter t. The engine supports implicit multiplication, standard constants, and comprehensive elementary and transcendental operations.
+</p>
+
+<h3>4.1 Operators &amp; Standard Constants</h3>
+<table>
+  <tr>
+    <th>Element</th>
+    <th>Syntax</th>
+    <th>Description</th>
+    <th>Example Expression</th>
+  </tr>
+  <tr>
+    <td><strong>Arithmetic</strong></td>
+    <td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code></td>
+    <td>Basic operations with standard algebraic precedence</td>
+    <td><code>2*t + 3</code>, <code>12 / 3 / 2</code> (= 2)</td>
+  </tr>
+  <tr>
+    <td><strong>Implicit Mult.</strong></td>
+    <td><em>(adjacent tokens)</em></td>
+    <td>Multiplies adjacent constants, variables, and parentheses</td>
+    <td><code>2t</code>, <code>3sin(t)</code>, <code>(t+1)(t-1)</code></td>
+  </tr>
+  <tr>
+    <td><strong>Exponentiation</strong></td>
+    <td><code>^</code></td>
+    <td>Right-associative power operator</td>
+    <td><code>t^2</code>, <code>2^3^2</code> (= 2<sup>9</sup> = 512)</td>
+  </tr>
+  <tr>
+    <td><strong>Pi (&pi;)</strong></td>
+    <td><code>pi</code>, <code>PI</code></td>
+    <td>Archimedes' constant &pi; &approx; 3.141592653589793</td>
+    <td><code>2*pi*t</code>, <code>cos(2pi)</code></td>
+  </tr>
+  <tr>
+    <td><strong>Tau (&tau;)</strong></td>
+    <td><code>tau</code>, <code>TAU</code></td>
+    <td>Full turn constant &tau; = 2&pi; &approx; 6.283185307179586</td>
+    <td><code>sin(tau * t)</code></td>
+  </tr>
+  <tr>
+    <td><strong>Euler's e</strong></td>
+    <td><code>e</code>, <code>E</code></td>
+    <td>Natural exponential base e &approx; 2.718281828459045</td>
+    <td><code>e^(-0.1*t)</code></td>
+  </tr>
+  <tr>
+    <td><strong>Golden Ratio</strong></td>
+    <td><code>phi</code>, <code>PHI</code></td>
+    <td>Golden ratio &phi; = (1+&radic;5)/2 &approx; 1.618033988749895</td>
+    <td><code>phi * t</code></td>
+  </tr>
+</table>
+
+<h3>4.2 Built-In Mathematical Functions Reference</h3>
+<table>
+  <tr>
+    <th>Function Family</th>
+    <th>Supported Function Identifiers</th>
+    <th>Description &amp; Notes</th>
+  </tr>
+  <tr>
+    <td><strong>Trigonometric</strong></td>
+    <td><code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sec</code>, <code>csc</code>, <code>cot</code>, <code>sinc</code></td>
+    <td>Standard and reciprocal circular functions (arguments in radians). <code>sinc(t)</code> returns 1.0 at t=0.</td>
+  </tr>
+  <tr>
+    <td><strong>Inverse Trig</strong></td>
+    <td><code>asin</code>, <code>acos</code>, <code>atan</code>, <code>atan2(y,x)</code></td>
+    <td>Inverse circular functions. <code>atan2</code> handles full four-quadrant angle resolution.</td>
+  </tr>
+  <tr>
+    <td><strong>Hyperbolic</strong></td>
+    <td><code>sinh</code>, <code>cosh</code>, <code>tanh</code>, <code>asinh</code>, <code>acosh</code>, <code>atanh</code></td>
+    <td>Hyperbolic operations for catenary curves and pseudospherical manifolds.</td>
+  </tr>
+  <tr>
+    <td><strong>Exponential &amp; Log</strong></td>
+    <td><code>exp</code>, <code>ln</code>, <code>log</code>, <code>log10</code>, <code>log2</code></td>
+    <td>Natural, decimal, and binary logarithmic scaling and decay envelopes.</td>
+  </tr>
+  <tr>
+    <td><strong>Roots &amp; Powers</strong></td>
+    <td><code>sqrt</code>, <code>cbrt</code>, <code>pow(b, e)</code>, <code>hypot(x, y)</code></td>
+    <td><code>cbrt(t)</code> cleanly handles negative inputs (cbrt(&minus;27) = &minus;3). <code>hypot(x,y)</code> computes &radic;(x&sup2;+y&sup2;).</td>
+  </tr>
+  <tr>
+    <td><strong>Discontinuous / Steps</strong></td>
+    <td><code>abs</code>, <code>sign</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>clamp</code>, <code>heaviside</code></td>
+    <td>Piecewise stepped functions, rounding, clamping, and unit step transitions.</td>
+  </tr>
+</table>
+
+<h2>5. Adaptive Sampling &amp; Precision Controls</h2>
+<p>
+  Plot3D utilizes a recursive chord-error and curvature-bounded subdivision algorithm to discretize parametric equations with high CAD fidelity.
+</p>
+
+<div class="math-box">
+  <strong>Chord Error Tolerance Criterion:</strong><br>
+  e<sub>chord</sub> = || P<sub>mid</sub> &minus; (P<sub>0</sub> + P<sub>1</sub>)/2 || &gt; Tol<sub>abs</sub> + Tol<sub>rel</sub> &times; max(||P<sub>0</sub>||, ||P<sub>1</sub>||, ||P<sub>mid</sub>||, 1.0)
+  <br><br>
+  <strong>Curvature Angle Criterion:</strong> Subdivides whenever tangent turn angle &theta; = &ang;(P<sub>mid</sub> &minus; P<sub>0</sub>, P<sub>1</sub> &minus; P<sub>mid</sub>) &gt; 0.15 rad &approx; 8.5&deg;.
+</div>
+
+<h2>6. Alibre Design 3D Sketch Generation</h2>
+<p>
+  The Alibre integration service maps sampled curve points directly into native geometric entities inside the active Part document.
+</p>
+
+<h3>6.1 Entity Types</h3>
+<ul>
+  <li><strong>B-Spline Curve (<code>AddBSplineByPoints</code>)</strong> — <em>Recommended</em>: Fits a smooth continuous cubic NURBS curve through all sample points. Best for sweeps, aerodynamic lofts, and smooth organic profiles.</li>
+  <li><strong>Polyline (<code>AddLine</code>)</strong>: Chains consecutive sample points with linear 3D line segments. Ideal for faceted paths or rapid preview tests.</li>
+  <li><strong>Point Nodes (<code>AddPointNode</code>)</strong>: Places discrete 3D reference vertices. Ideal for CMM inspection targets or station guides.</li>
+</ul>
+
+<h3>6.2 Unit Conversion Matrix</h3>
+<p>
+  Alibre Design internally defines all part coordinates in <strong>Centimeters (<code>AD_CENTIMETERS</code>)</strong>. Plot3D applies the exact transformation scale factor:
+</p>
+<div class="math-box">
+  P<sub>Alibre</sub> (cm) = P<sub>Formula</sub> &times; Scale<sub>User</sub> &times; (ToMm(Units<sub>Input</sub>) / 10.0)
+</div>
+
+<table>
+  <tr>
+    <th>Input Unit Option</th>
+    <th>Conversion Multiplier to Centimeters</th>
+    <th>Resulting Model Scale (Scale = 1.0)</th>
+  </tr>
+  <tr>
+    <td><strong>Millimeters (mm)</strong></td>
+    <td>&times; 0.100</td>
+    <td>100 mm in formula &rarr; 10.0 cm in Alibre</td>
+  </tr>
+  <tr>
+    <td><strong>Centimeters (cm)</strong></td>
+    <td>&times; 1.000</td>
+    <td>10 cm in formula &rarr; 10.0 cm in Alibre</td>
+  </tr>
+  <tr>
+    <td><strong>Meters (m)</strong></td>
+    <td>&times; 100.000</td>
+    <td>1.0 m in formula &rarr; 100.0 cm in Alibre</td>
+  </tr>
+  <tr>
+    <td><strong>Inches (in)</strong></td>
+    <td>&times; 2.540</td>
+    <td>1.0 in in formula &rarr; 2.54 cm in Alibre</td>
+  </tr>
+  <tr>
+    <td><strong>Feet (ft)</strong></td>
+    <td>&times; 30.480</td>
+    <td>1.0 ft in formula &rarr; 30.48 cm in Alibre</td>
+  </tr>
+</table>
+
+<h2>7. Downstream CAD Modeling Best Practices</h2>
+
+<div class="callout">
+  <div class="callout-title">CAD Best Practice: 3D Swept Features (Springs, Tubes, Channels)</div>
+  <p>
+    1. <strong>Insert Normal Plane</strong>: Use <strong>Feature &gt; Plane</strong> with <em>Normal to Curve</em> mode at curve vertex t = t<sub>min</sub>.<br>
+    2. <strong>Draw Profile Sketch</strong>: Create a 2D circle or custom profile centered coincident with the curve origin.<br>
+    3. <strong>Sweep</strong>: Execute <strong>Sweep Boss</strong> with Profile = 2D Sketch, Path = 3D B-Spline Sketch.<br>
+    4. <strong>Curvature Check</strong>: Ensure profile radius r<sub>profile</sub> &lt; &rho;<sub>min</sub> to prevent self-intersection.
+  </p>
+</div>
+
+<div class="callout">
+  <div class="callout-title">CAD Best Practice: Guided Surface Lofts</div>
+  <p>
+    Generate multiple parallel 3D curves in separate sketches to act as guide rails for <strong>Loft Boss / Cut</strong> across planar cross-section sketches.
+  </p>
+</div>
+
+<h2>8. Mathematical Preset Curve Catalog</h2>
+<table>
+  <tr>
+    <th>Curve Name</th>
+    <th>Equations x(t), y(t), z(t)</th>
+    <th>Domain [t<sub>min</sub>, t<sub>max</sub>]</th>
+    <th>Engineering &amp; CAD Applications</th>
+  </tr>
+  <tr>
+    <td><strong>Circular Helix</strong></td>
+    <td><code>x = sin(t)</code><br><code>y = cos(t)</code><br><code>z = t</code></td>
+    <td><code>0</code> to <code>6*pi</code></td>
+    <td>Helical compression springs, thread profiles, conveyor augers, spiral staircases.</td>
+  </tr>
+  <tr>
+    <td><strong>Trefoil Knot</strong></td>
+    <td><code>x = sin(t) + 2*sin(2*t)</code><br><code>y = cos(t) - 2*cos(2*t)</code><br><code>z = -sin(3*t)</code></td>
+    <td><code>0</code> to <code>2*pi</code></td>
+    <td>Non-trivial topological 3<sub>1</sub> knot, decorative hardware, jewelry, torus magnetic paths.</td>
+  </tr>
+  <tr>
+    <td><strong>Torus Knot (2,3)</strong></td>
+    <td><code>x = (2 + cos(3*t))*cos(2*t)</code><br><code>y = (2 + cos(3*t))*sin(2*t)</code><br><code>z = sin(3*t)</code></td>
+    <td><code>0</code> to <code>2*pi</code></td>
+    <td>Toroidal inductor windings, filament winding mandrels, complex decorative structures.</td>
+  </tr>
+  <tr>
+    <td><strong>Viviani's Curve</strong></td>
+    <td><code>x = 1 + cos(t)</code><br><code>y = sin(t)</code><br><code>z = 2*sin(t/2)</code></td>
+    <td><code>-2*pi</code> to <code>2*pi</code></td>
+    <td>Intersection of sphere and cylinder. Cylindrical cam tracks, aerospace porting channels.</td>
+  </tr>
+  <tr>
+    <td><strong>Conical Spiral</strong></td>
+    <td><code>x = t * cos(10*t)</code><br><code>y = t * sin(10*t)</code><br><code>z = t</code></td>
+    <td><code>0</code> to <code>2*pi</code></td>
+    <td>Tapered vortex nozzles, antenna feeds, conical shock absorber springs.</td>
+  </tr>
+  <tr>
+    <td><strong>3D Lissajous</strong></td>
+    <td><code>x = sin(3*t)</code><br><code>y = cos(4*t)</code><br><code>z = sin(5*t)</code></td>
+    <td><code>0</code> to <code>2*pi</code></td>
+    <td>Harmonic vibration orbits, multi-axis galvanometer laser scanning trajectories.</td>
+  </tr>
+  <tr>
+    <td><strong>Damped Spiral</strong></td>
+    <td><code>x = exp(-0.12*t)*cos(5*t)</code><br><code>y = exp(-0.12*t)*sin(5*t)</code><br><code>z = t</code></td>
+    <td><code>0</code> to <code>20</code></td>
+    <td>Acoustic damping coils, decaying spring recoil guides, dissipation waveguides.</td>
+  </tr>
+</table>
+
+<h2>9. Multi-Format Export Pipeline</h2>
+<table>
+  <tr>
+    <th>Format</th>
+    <th>File Extension</th>
+    <th>Output Structure</th>
+    <th>Compatible Target Systems</th>
+  </tr>
+  <tr>
+    <td><strong>Wavefront OBJ</strong></td>
+    <td><code>.obj</code></td>
+    <td>3D polyline mesh vertices (<code>v</code>) and line elements (<code>l</code>)</td>
+    <td>Blender, Rhino, Maya, 3ds Max, Unity, Unreal Engine</td>
+  </tr>
+  <tr>
+    <td><strong>Point Cloud CSV</strong></td>
+    <td><code>.csv</code></td>
+    <td>Tabular comma-separated values: <code>t,x,y,z</code></td>
+    <td>Excel, MATLAB, Python (NumPy/SciPy), CMM inspection</td>
+  </tr>
+  <tr>
+    <td><strong>Scalable Vector</strong></td>
+    <td><code>.svg</code></td>
+    <td>2D projected vector paths with depth gradient shading</td>
+    <td>Adobe Illustrator, Inkscape, Patent &amp; Technical Docs</td>
+  </tr>
+  <tr>
+    <td><strong>High-DPI PNG</strong></td>
+    <td><code>.png</code></td>
+    <td>Anti-aliased raster frame with transparent background</td>
+    <td>Presentations, design reviews, technical web reports</td>
+  </tr>
+  <tr>
+    <td><strong>Windows Clipboard</strong></td>
+    <td><em>Memory</em></td>
+    <td>Tab-delimited coordinate text matrix</td>
+    <td>Direct paste into Alibre coordinate tables or Excel</td>
+  </tr>
+</table>
+
+<h2>10. Troubleshooting &amp; FAQs</h2>
+<div class="callout-warn">
+  <div class="callout-title">Common Issue: "Failed to access Alibre Design active part"</div>
+  <p>Ensure that an active Part workspace (<code>.AD_PR</code>) is open. Alibre Design 3D sketches cannot be inserted directly into Assembly (<code>.AD_ASM</code>) or Drawing (<code>.AD_DRW</code>) environments.</p>
+</div>
+
+<div class="callout-warn">
+  <div class="callout-title">Common Issue: "B-Spline creation failed; falling back to polyline"</div>
+  <p>This occurs when an equation has extreme geometric cusps or sharp direction reversals. Plot3D automatically falls back to a high-density polyline to prevent CAD kernel failure.</p>
+</div>
+
+<div class="footer-note">
+  Plot3D for Alibre Design &bull; User Guide &amp; Mathematical Reference Manual &bull; Version 1.0.0
+</div>
+
+</body>
+</html>
