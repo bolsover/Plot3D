@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Plot3D.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+545775bfc10b46c93c28d547f19b32bacbcd5542")]
 [assembly: System.Reflection.AssemblyProductAttribute("Plot3D.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Plot3D.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
