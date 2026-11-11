@@ -37,12 +37,10 @@ namespace AlibreAddOnAssembly
             return _root;
         }
 
-        public static void AddOnInvoke(IntPtr hwnd, IntPtr pAutomationHook, string sessionName, bool isLicensed, int reserved1, int reserved2)
+       public static void AddOnInvoke(IntPtr hwnd, IntPtr pAutomationHook, string sessionName, bool isLicensed, int reserved1, int reserved2)
         {
-            _addOn?.InvokeCommand(Plot3DAddOn.MenuIdCommand, sessionName);
-        }
-
-        public static void AddOnUnload(IntPtr hwnd, bool forceUnload, ref bool cancel, int reserved1, int reserved2)
+}
+       public static void AddOnUnload(IntPtr hwnd, bool forceUnload, ref bool cancel, int reserved1, int reserved2)
         {
             _addOn = null;
             _root = null;

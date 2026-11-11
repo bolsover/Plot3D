@@ -12,8 +12,8 @@ namespace Plot3D.UI.Alibre
     {
         public const string Title = "Plot3D Studio";
         public const int MenuIdRoot = 40300;
-        public const int MenuIdCommand = 40301;
-        private static readonly int[] SubMenuIds = { MenuIdCommand };
+
+        public Array SubMenuItems(int menuId) => null;
 
         private readonly IADRoot _root;
         private readonly IntPtr _parentWindow;
@@ -33,35 +33,21 @@ namespace Plot3D.UI.Alibre
 
         public int RootMenuItem => MenuIdRoot;
 
-        public bool HasSubMenus(int menuId) => menuId == MenuIdRoot;
+        // The root menu item is a single leaf command: no sub menus, not a popup.
+        public bool HasSubMenus(int menuId) => false;
 
-        public Array SubMenuItems(int menuId) => menuId == MenuIdRoot ? SubMenuIds : new int[0];
 
-        public string MenuItemText(int menuId)
-        {
-            switch (menuId)
-            {
-                case MenuIdRoot: return "Plot3D";
-                case MenuIdCommand: return "3D Parametric Curve Studio";
-                default: return string.Empty;
-            }
-        }
+        public string MenuItemText(int menuId) => menuId == MenuIdRoot ? Title : string.Empty;
 
-        public bool PopupMenu(int menuId) => menuId == MenuIdRoot;
+        public bool PopupMenu(int menuId) => false;
 
         public ADDONMenuStates MenuItemState(int menuId, string sessionIdentifier)
         {
-            if (menuId == MenuIdRoot) return ADDONMenuStates.ADDON_MENU_ENABLED;
-            return menuId == MenuIdCommand && IsSupportedVersion
-                ? ADDONMenuStates.ADDON_MENU_ENABLED
-                : ADDONMenuStates.ADDON_MENU_GRAYED;
+            return ADDONMenuStates.ADDON_MENU_ENABLED;
         }
 
         public string MenuItemToolTip(int menuId)
         {
-            if (menuId != MenuIdCommand) return string.Empty;
-            if (!IsSupportedVersion)
-                return "Requires Alibre Design build " + AlibreVersion.MinimumBuild + " or later (this is build " + _build + ")";
             return "Open Plot3D to create 3D parametric curves and generate 3D sketches in the active Part.";
         }
 
@@ -71,10 +57,8 @@ namespace Plot3D.UI.Alibre
 
         public IAlibreAddOnCommand? InvokeCommand(int menuId, string sessionIdentifier)
         {
-            if (menuId == MenuIdCommand)
-            {
-                ShowWindow(sessionIdentifier);
-            }
+            ShowWindow(sessionIdentifier);
+
             return null;
         }
 
@@ -84,7 +68,7 @@ namespace Plot3D.UI.Alibre
             {
                 if (!IsSupportedVersion)
                 {
-                    MessageBox.Show(MenuItemToolTip(MenuIdCommand), Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(MenuItemToolTip(MenuIdRoot), Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -113,9 +97,18 @@ namespace Plot3D.UI.Alibre
             }
         }
 
-        public void LoadData(IStream pCustomData, string sessionIdentifier) { }
-        public void SaveData(IStream pCustomData, string sessionIdentifier) { }
-        public void setIsAddOnLicensed(bool isLicensed) { }
+        public void LoadData(IStream pCustomData, string sessionIdentifier)
+        {
+        }
+
+        public void SaveData(IStream pCustomData, string sessionIdentifier)
+        {
+        }
+
+        public void setIsAddOnLicensed(bool isLicensed)
+        {
+        }
+
         public bool UseDedicatedRibbonTab() => false;
     }
 
