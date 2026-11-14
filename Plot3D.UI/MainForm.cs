@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AlibreX;
@@ -66,12 +67,7 @@ namespace Plot3D.UI
         private readonly Button _btnResetView;
         private readonly Button _btnAnimate;
 
-        // Export buttons
-        private readonly Button _btnExportPng;
-        private readonly Button _btnExportSvg;
-        private readonly Button _btnExportObj;
-        private readonly Button _btnExportCsv;
-        private readonly Button _btnCopyClipboard;
+        
 
         // Status bar
         private readonly StatusStrip _statusStrip;
@@ -81,10 +77,61 @@ namespace Plot3D.UI
         private readonly ToolStripStatusLabel _cameraLabel;
         private readonly ToolStripStatusLabel _hoverLabel;
 
+        // Menu bar
+        private readonly MenuStrip _menuStrip;
+        private readonly ToolStripMenuItem _menuViewOrthographic;
+        private readonly ToolStripMenuItem _menuViewPerspective;
+
         private bool _suppressPresetEvents;
+        private Icon? _appIcon;
 
         public MainForm() : this(null, IntPtr.Zero)
         {
+        }
+
+        /// <summary>
+        /// Loads Plot3D.ico from the folder containing this assembly (works standalone and when hosted as an
+        /// Alibre add-on, where the process executable is not ours). Falls back to the icon embedded in the
+        /// assembly file. Returns null if neither is available so the default form icon is kept.
+        /// </summary>
+        private static Icon? LoadApplicationIcon()
+        {
+            try
+            {
+                string assemblyPath = typeof(MainForm).Assembly.Location;
+                string? directory = string.IsNullOrEmpty(assemblyPath) ? null : Path.GetDirectoryName(assemblyPath);
+                if (directory != null)
+                {
+                    string iconPath = Path.Combine(directory, "Plot3D.ico");
+                    if (File.Exists(iconPath))
+                    {
+                        return new Icon(iconPath);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(assemblyPath) && File.Exists(assemblyPath))
+                {
+                    return Icon.ExtractAssociatedIcon(assemblyPath);
+                }
+            }
+            catch (Exception)
+            {
+                // A missing or unreadable icon must never prevent the window from opening.
+            }
+
+            return null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Icon = null;
+                _appIcon?.Dispose();
+                _appIcon = null;
+            }
+
+            base.Dispose(disposing);
         }
 
         public MainForm(IADRoot? alibreRoot, IntPtr alibreParentWindow = default)
@@ -93,6 +140,11 @@ namespace Plot3D.UI
             _alibreParentWindow = alibreParentWindow;
 
             Text = "Plot3D - 3D Parametric Formula Studio";
+            _appIcon = LoadApplicationIcon();
+            if (_appIcon != null)
+            {
+                Icon = _appIcon;
+            }
             Width = 1400;
             Height = 1060;
             MinimumSize = new Size(900, 650);
@@ -168,18 +220,7 @@ namespace Plot3D.UI
             _sidePanel.Controls.Add(lblTitle);
             curY += 30;
 
-            // var lblSubtitle = new Label
-            // {
-            //     Text = "Interactive visualizer",
-            //     Font = new Font("Segoe UI", 8.2f),
-            //     ForeColor = Color.FromArgb(100, 116, 139),
-            //     Location = new Point(12, curY),
-            //     AutoSize = true
-            // };
-            // _sidePanel.Controls.Add(lblSubtitle);
-            // curY += 22;
-
-            // 2. Presets Group
+          // 2. Presets Group
             var grpPresets = CreateSectionHeader("Predefined Presets", ref curY);
             _cboPresets = new ComboBox
             {
@@ -331,7 +372,7 @@ namespace Plot3D.UI
 
             // 6. Alibre 3D Sketch Integration Group
             var grpAlibre = CreateSectionHeader("Alibre 3D Sketch (Part)", ref curY);
-
+            curY += 10;
             // Curve Geometry Type
             var lblGeom = new Label { Text = "Curve:", Location = new Point(16, curY + 2), AutoSize = true, Font = new Font("Segoe UI Semibold", 8.5f) };
             _cboAlibreGeometryType = new ComboBox
@@ -350,7 +391,7 @@ namespace Plot3D.UI
             _cboAlibreGeometryType.SelectedIndex = 0;
             _sidePanel.Controls.Add(lblGeom);
             _sidePanel.Controls.Add(_cboAlibreGeometryType);
-            curY += 30;
+            curY += 35;
 
             // Unit Scale Mode
             var lblUnits = new Label { Text = "Units:", Location = new Point(16, curY + 2), AutoSize = true, Font = new Font("Segoe UI Semibold", 8.5f) };
@@ -388,7 +429,7 @@ namespace Plot3D.UI
             _sidePanel.Controls.Add(lblUnits);
             _sidePanel.Controls.Add(_cboAlibreUnits);
             _sidePanel.Controls.Add(_txtAlibreScale);
-            curY += 30;
+            curY += 35;
 
             // Sketch Name & Target
             var lblSketchName = new Label { Text = "Name:", Location = new Point(16, curY + 2), AutoSize = true, Font = new Font("Segoe UI Semibold", 8.5f) };
@@ -401,7 +442,7 @@ namespace Plot3D.UI
             };
             _sidePanel.Controls.Add(lblSketchName);
             _sidePanel.Controls.Add(_txtAlibreSketchName);
-            curY += 28;
+            curY += 35;
 
             _chkAlibreNewSketch = new CheckBox
             {
@@ -430,7 +471,7 @@ namespace Plot3D.UI
             _btnCreateAlibre3DSketch.FlatAppearance.BorderSize = 0;
             _btnCreateAlibre3DSketch.Click += (s, e) => CreateAlibre3DSketch();
             _sidePanel.Controls.Add(_btnCreateAlibre3DSketch);
-            curY += 38;
+            curY += 45;
 
             // Status label for Alibre
             _lblAlibreStatus = new Label
@@ -442,7 +483,7 @@ namespace Plot3D.UI
                 ForeColor = Color.FromArgb(100, 116, 139)
             };
             _sidePanel.Controls.Add(_lblAlibreStatus);
-            curY += 36;
+            curY += 50;
 
             // 7. View & Camera Angles
             var grpView = CreateSectionHeader("View & Camera Angles", ref curY);
@@ -464,7 +505,7 @@ namespace Plot3D.UI
             pnlProj.Controls.Add(_rbOrthographic);
             pnlProj.Controls.Add(_rbPerspective);
             _sidePanel.Controls.Add(pnlProj);
-            curY += 28;
+            curY += 35;
 
             // Checkboxes (Grid, Box, Gizmo, Hover)
             var pnlToggles = new FlowLayoutPanel
@@ -533,66 +574,8 @@ namespace Plot3D.UI
             _sidePanel.Controls.Add(lblZm);
             _sidePanel.Controls.Add(_trkZoom);
             _sidePanel.Controls.Add(_lblZoomVal);
-            curY += 50;
-
-            // 8. Export Group
-            var grpExport = CreateSectionHeader("Export & Sharing", ref curY);
-            var pnlExport1 = new FlowLayoutPanel
-            {
-                Location = new Point(16, curY),
-                Width = 320,
-                Height = 30,
-                WrapContents = false,
-                Margin = Padding.Empty,
-                Padding = Padding.Empty
-            };
-            _btnExportPng = CreateExportButton("PNG Image", (s, e) => ExportFile("PNG Image (*.png)|*.png", ".png", path => _plotControl.ExportToPng(path, 2400, 1600)));
-            _btnExportSvg = CreateExportButton("SVG Vector", (s, e) => ExportFile("Scalable Vector Graphics (*.svg)|*.svg", ".svg", path => _plotControl.ExportToSvg(path, 1200, 900)));
-            pnlExport1.Controls.Add(_btnExportPng);
-            pnlExport1.Controls.Add(_btnExportSvg);
-            _sidePanel.Controls.Add(pnlExport1);
-            curY += 32;
-
-            var pnlExport2 = new FlowLayoutPanel
-            {
-                Location = new Point(16, curY),
-                Width = 320,
-                Height = 30,
-                WrapContents = false,
-                Margin = Padding.Empty,
-                Padding = Padding.Empty
-            };
-            _btnExportObj = CreateExportButton("3D OBJ", (s, e) => ExportFile("Wavefront 3D Object (*.obj)|*.obj", ".obj", path => _plotControl.ExportToObj(path)));
-            _btnExportCsv = CreateExportButton("CSV Points", (s, e) => ExportFile("CSV Coordinates (*.csv)|*.csv", ".csv", path => _plotControl.ExportToCsv(path)));
-            pnlExport2.Controls.Add(_btnExportObj);
-            pnlExport2.Controls.Add(_btnExportCsv);
-            _sidePanel.Controls.Add(pnlExport2);
-            curY += 32;
-
-            _btnCopyClipboard = new Button
-            {
-                Text = "📋 Copy Image to Clipboard",
-                Location = new Point(16, curY),
-                Width = 320,
-                Height = 28,
-                BackColor = Color.FromArgb(241, 245, 249),
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
-            };
-            _btnCopyClipboard.FlatAppearance.BorderColor = Color.FromArgb(203, 213, 225);
-            _btnCopyClipboard.Click += (s, e) =>
-            {
-                using var bmp = new Bitmap(_plotControl.Width, _plotControl.Height);
-                using (var g = Graphics.FromImage(bmp))
-                {
-                    _plotControl.RenderToGraphics(g, bmp.Width, bmp.Height);
-                }
-                Clipboard.SetImage(bmp);
-                _statusLabel.Text = "Plot image copied to clipboard.";
-            };
-            _sidePanel.Controls.Add(_btnCopyClipboard);
-            curY += 40;
-
+          
+           
             // Wire Plot Events
             _plotControl.CameraChanged += (s, e) =>
             {
@@ -633,8 +616,81 @@ namespace Plot3D.UI
 
             _splitContainer.SplitterDistance = 400;
 
+            // Menu Bar (added last so it docks at the top, above the split container; status strip stays at the bottom)
+            _menuStrip = new MenuStrip { Dock = DockStyle.Top };
+
+            var menuFile = new ToolStripMenuItem("&File");
+            menuFile.DropDownItems.Add(new ToolStripMenuItem("Export to &PNG...", null, (s, e) => ExportPng()));
+            menuFile.DropDownItems.Add(new ToolStripMenuItem("Export to &SVG...", null, (s, e) => ExportSvg()));
+            menuFile.DropDownItems.Add(new ToolStripMenuItem("Export to &OBJ...", null, (s, e) => ExportObj()));
+            menuFile.DropDownItems.Add(new ToolStripMenuItem("Export to &CSV...", null, (s, e) => ExportCsv()));
+            menuFile.DropDownItems.Add(new ToolStripMenuItem("Copy to &Clipboard...", null, (s, e) =>CopyToClipboard()));
+
+            _menuViewOrthographic = new ToolStripMenuItem("&Orthographic") { CheckOnClick = false };
+            _menuViewPerspective = new ToolStripMenuItem("&Perspective") { CheckOnClick = false };
+            _menuViewOrthographic.Click += (s, e) => _rbOrthographic.Checked = true;
+            _menuViewPerspective.Click += (s, e) => _rbPerspective.Checked = true;
+            _rbOrthographic.CheckedChanged += (s, e) => SyncProjectionMenu();
+            _rbPerspective.CheckedChanged += (s, e) => SyncProjectionMenu();
+
+            var menuView = new ToolStripMenuItem("&View");
+            menuView.DropDownItems.Add(_menuViewOrthographic);
+            menuView.DropDownItems.Add(_menuViewPerspective);
+
+            var menuHelp = new ToolStripMenuItem("&Help");
+            menuHelp.DropDownItems.Add(new ToolStripMenuItem("&About", null, (s, e) => ShowAboutDialog()));
+            menuHelp.DropDownItems.Add(new ToolStripMenuItem("&License...", null, (s, e) => ShowLicenseDialog()));
+
+            _menuStrip.Items.AddRange(new ToolStripItem[] { menuFile, menuView, menuHelp });
+            SyncProjectionMenu();
+
+            Controls.Add(_menuStrip);
+            MainMenuStrip = _menuStrip;
+
             // Initial Plot
             LoadPreset((PresetCurve)_cboPresets.SelectedItem!);
+        }
+
+        private void SyncProjectionMenu()
+        {
+            _menuViewOrthographic.Checked = _rbOrthographic.Checked;
+            _menuViewPerspective.Checked = _rbPerspective.Checked;
+        }
+
+        private void ShowAboutDialog()
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.1";
+            MessageBox.Show(
+                this,
+                $"Plot3D - 3D Parametric Formula Studio\nVersion {version}\n\nCopyright © David Bolsover 2026 \n\nEnter parametric equations X(t), Y(t), Z(t), visualize them interactively, export to PNG, SVG, OBJ or CSV, and optionally create 3D sketches in Alibre Design.",
+                "About Plot3D",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        private void ShowLicenseDialog()
+        {
+            using var dlg = new LicenseDialog();
+            dlg.ShowDialog(this);
+        }
+
+        private void ExportPng() => ExportFile("PNG Image (*.png)|*.png", ".png", path => _plotControl.ExportToPng(path, 2400, 1600));
+
+        private void ExportSvg() => ExportFile("Scalable Vector Graphics (*.svg)|*.svg", ".svg", path => _plotControl.ExportToSvg(path, 1200, 900));
+
+        private void ExportObj() => ExportFile("Wavefront 3D Object (*.obj)|*.obj", ".obj", path => _plotControl.ExportToObj(path));
+
+        private void ExportCsv() => ExportFile("CSV Coordinates (*.csv)|*.csv", ".csv", path => _plotControl.ExportToCsv(path));
+        
+        private void CopyToClipboard() 
+        {
+            using var bmp = new Bitmap(_plotControl.Width, _plotControl.Height);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                _plotControl.RenderToGraphics(g, bmp.Width, bmp.Height);
+            }
+            Clipboard.SetImage(bmp);
+            _statusLabel.Text = "Plot image copied to clipboard.";
         }
 
         private void AddQuickRangeButton(FlowLayoutPanel pnl, string label, string tmin, string tmax)
@@ -660,23 +716,7 @@ namespace Plot3D.UI
             pnl.Controls.Add(btn);
         }
 
-        private Button CreateExportButton(string text, EventHandler handler)
-        {
-            var btn = new Button
-            {
-                Text = text,
-                Width = 154,
-                Height = 28,
-                BackColor = Color.FromArgb(241, 245, 249),
-                FlatStyle = FlatStyle.Flat,
-                Margin = new Padding(0, 0, 8, 0),
-                Cursor = Cursors.Hand
-            };
-            btn.FlatAppearance.BorderColor = Color.FromArgb(203, 213, 225);
-            btn.Click += handler;
-            return btn;
-        }
-
+      
         private Label CreateSectionHeader(string title, ref int curY)
         {
             var lbl = new Label
@@ -710,7 +750,6 @@ namespace Plot3D.UI
             _txtTMin.Text = preset.TMin;
             _txtTMax.Text = preset.TMax;
             _txtAlibreSketchName.Text = $"Plot3D - {preset.Name}";
-            // _cboColorMap.SelectedItem = preset.DefaultColorMap;
             _plotControl.Azimuth = preset.Azimuth;
             _plotControl.Elevation = preset.Elevation;
             _suppressPresetEvents = false;
